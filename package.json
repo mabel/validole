@@ -1,0 +1,23 @@
+{
+  "name": "validole",
+  "version": "0.0.1",
+  "description": "Validator for Backbone.",
+  "homepage": "http://mabel.github.io/validole",
+  "author": {
+    "name": "Michael Belyakov",
+    "email": "pochta@yababay.ru",
+    "url": "http://yababay.ru"
+  },
+  "repository": "mabel/validole",
+  "license": "MIT",
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "validation",
+    "Backbone"
+  ],
+  "dependencies": {
+    "gulp": "^3.8.10"
+  }
+}

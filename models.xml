@@ -1,0 +1,11 @@
+<?xml version='1.0'?>
+<models>
+  <model name='User'>
+    <description>Сохранение данных о пользователе</description>
+    <params>
+	  <param name='login' filter='/[A-Za-z0-9\-]+/' notempty='true'/>
+      <param name='email' filter='email' notempty='true'/>
+      <param name='skype' filter='skype'/>
+    </params>
+  </model>
+</models>
