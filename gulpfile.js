@@ -1,35 +1,29 @@
-var minify = require('gulp-uglify')
 var fs   = require('fs')
 var gulp = require('gulp')
+var uglify = require('gulp-uglify')
+var concat = require('gulp-concat')
 var xslt = require('node_xslt')
 var xslString = require('./xsl-string')
 var document = xslt.readXmlFile('models.xml');
 var stylesheet = xslt.readXsltString(xslString)
 
-var serverDestPath = 'server_out'
-var clientDestPath = 'client_out'
-
-gulp.task('default', ['server', 'client'], function(){
-	console.log('done')
-	//var document = xslt.readXmlFile('models.xml');
-	//var stylesheet = xslt.readXsltString(xslString)
-	//var stylesheet = xslt.readXsltFile('models.xsl')
-	//var transformedString = xslt.transform(stylesheet, document, ['target', '"server"']);
-	//var transformedString = xslt.transform(stylesheet, document, ['target', '"client"']);
-	//fs.writeFile('validate_server.js', transformedString)
-	//stylesheet = xslt.readXsltFile('client.xsl')
-	//transformedString = xslt.transform(stylesheet, document, []);
-	//fs.writeFile('validate_client.js', transformedString)
-})
+var outDirs = {
+	client: 'out_client',
+	server: 'out_server',
+}
 
 gulp.task('client', function(){
-	var transformedString = xslt.transform(stylesheet, document, ['target', '"client"']);
-	fs.writeFile('validate_client.js', transformedString)
-	gulp.src('validate_client.js').pipe(minify()).pipe(gulp.dest(clientDestPath))
+	produce('client')
 })
 
 gulp.task('server', function(){
-	var transformedString = xslt.transform(stylesheet, document, ['target', '"server"']);
-	fs.writeFile('validate_server.js', transformedString)
-	gulp.src('validate_client.js').pipe(minify()).pipe(gulp.dest(serverDestPath))
+	produce('server')
 })
+
+function produce(target){
+	var transformedString = xslt.transform(stylesheet, document, ['target', '"' + target + '"']);
+	fs.writeFile('validate_' + target + '.js', transformedString)
+	gulp.src(['validate_' + target + '.js', 'validator.js']).pipe(concat(target + '.min.js')).pipe(uglify()).pipe(gulp.dest(outDirs[target]))
+}
+
+gulp.task('default', ['server', 'client'])
