@@ -1,6 +1,6 @@
 {
   "name": "validole",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Validator for Backbone.",
   "homepage": "http://mabel.github.io/validole",
   "author": {
@@ -11,7 +11,7 @@
   "repository": "mabel/validole",
   "license": "MIT",
   "files": [
-    "index.js",
+    "validator.js",
     "gulpfile.js",
     "xsl-string.js"
   ],
@@ -23,6 +23,7 @@
   "dependencies": {
     "gulp": "^3.8.10",
     "gulp-uglify": "^1.0.2",
+    "gulp-concat": "^2.4.2",
     "node_xslt": "^0.1.9"
   }
 }

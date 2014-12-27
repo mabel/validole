@@ -108,13 +108,3 @@ function validator(value, filter, mayNotBeEmpty){
     }
 }
 
-var isServer  = typeof document === 'undefined'
-
-if(isServer){
-	module.exports = valdator
-}
-else {
-	define(function(){
-		return validator
-	})
-}
