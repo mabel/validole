@@ -22,16 +22,14 @@
     <xsl:choose>
 		<xsl:when test="$target = 'server'">
 	      <xsl:value-of select="concat('var _  = require(&quot;underscore&quot;)', $cr)"/>
-	      <xsl:value-of select="concat('var Backbone = require(&quot;backbone&quot;)', $cr)"/>
-	      <xsl:value-of select="concat('var validator = require(&quot;./validator&quot;)', $cr, $cr)"/>
+	      <xsl:value-of select="concat('var Backbone = require(&quot;backbone&quot;)', $cr, $cr)"/>
 		</xsl:when>
 		<xsl:otherwise>
-		  <xsl:value-of select="concat('define([&quot;underscore&quot;, &quot;backbone&quot;, &quot;validator&quot;], function(_, Backbone, validator){', $cr)"/>
+		  <xsl:value-of select="concat('define([&quot;underscore&quot;, &quot;backbone&quot;], function(_, Backbone){', $cr)"/>
 		</xsl:otherwise>
 	</xsl:choose>
 	<xsl:for-each select="/models/model">
-	  <xsl:value-of select="concat($cr2sp, 'var ', @name, ' = Backbone.Model.extend({')"/>
-	  <xsl:value-of select="concat($cr4sp, 'validate: function(attrs, opts){')"/>
+ 	  <xsl:value-of select="concat($cr2sp, 'var ', @name, ' = function(attrs, opts){')"/>
 	  <xsl:value-of select="concat($cr6sp, 'var notEmpty = null;')"/>
 	  <xsl:for-each select="params/param">
 	    <xsl:value-of select="concat($cr6sp, 'notEmpty = ')"/>
@@ -40,12 +38,16 @@
 			<xsl:otherwise>false</xsl:otherwise>
 		</xsl:choose>
 	    <xsl:value-of select="string(';')"/>
-		<xsl:value-of select="concat($cr6sp, 'if(!validator(this.get(&quot;', @name, '&quot;)), &quot;', @filter, '&quot;, notEmpty){')"/>
-	    <xsl:value-of select="concat($cr8sp, 'return &quot;', @name, '&quot;;')"/>
+		<xsl:value-of select="concat($cr6sp, 'if(!validator(this.get(&quot;', @name, '&quot;), &quot;', @filter, '&quot;, notEmpty)){')"/>
+		<xsl:value-of select="concat($cr8sp, 'return &quot;Error@', ../../@name, '.', @name, '&quot;;')"/>
 		<xsl:value-of select="concat($cr6sp, '};')"/>
+		<xsl:if test="@name = 'passwordAgain'">
+		  <xsl:value-of select="concat($cr6sp, 'if(this.get(&quot;password&quot;) != this.get(&quot;passwordAgain&quot;)){')"/>
+		    <xsl:value-of select="concat($cr8sp, 'return &quot;Error@', ../../@name, '.', @name, '&quot;;')"/>
+		  <xsl:value-of select="concat($cr6sp, '};')"/>
+		</xsl:if>
 	  </xsl:for-each>  
-	  <xsl:value-of select="concat($cr4sp, '},')"/>
-	  <xsl:value-of select="concat($cr2sp, '});', $cr)"/>
+	  <xsl:value-of select="concat($cr4sp, '}', $cr)"/>
 	</xsl:for-each>  
  	<xsl:choose>
 		<xsl:when test="$target = 'server'">
@@ -68,5 +70,6 @@
 		  <xsl:value-of select="concat($cr, '})')"/>
 		</xsl:otherwise>
 	</xsl:choose>
+    <xsl:value-of select="concat($cr, $cr)"/>
     </xsl:template>
 </xsl:stylesheet>

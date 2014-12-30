@@ -27,7 +27,6 @@ function validator(value, filter, mayNotBeEmpty){
 			return /^((\-?1)|0)$/.test(value)
 
 		case 'passwd':
-		case 'password':
 			return typeof value === 'string' && value.length > 7
 
 		case 'mail':
@@ -42,7 +41,7 @@ function validator(value, filter, mayNotBeEmpty){
 			return /^\d{4}[\-]\d{2}[\-]\d{2}$/.test(value);
 
 		case 'number':
-			return typeof value == 'number';
+			return __.isNumber(value);
 
 		case 'money':
 			return /^\d+(\.\d{1,2})?$/.test(value);
@@ -59,6 +58,27 @@ function validator(value, filter, mayNotBeEmpty){
 		case 'uids':
                         return /([A-Z]{3}[0-9]{6}\,)+/.test(value); 
 
+		case 'card':
+			/*if (/[^0-9 \-]+/.test(value)) return false
+			var nCheck = 0,
+				nDigit = 0,
+				bEven = false;
+
+			value = value.replace(/\D/g, "");
+
+			for (var n = value.length - 1; n >= 0; n--) {
+				var cDigit = value.charAt(n);
+				nDigit = parseInt(cDigit, 10);
+				if (bEven) {
+					if ((nDigit *= 2) > 9) {
+						nDigit -= 9;
+					}
+				}
+				nCheck += nDigit;
+				bEven = !bEven;
+			}
+
+			return (nCheck % 10) === 0;*/
       return /^\w+$/.test(value)
 		case 'inn':
       return /^\w+$/.test(value);
@@ -80,8 +100,11 @@ function validator(value, filter, mayNotBeEmpty){
 		case 'phone+':
             return /^\+\d+$/.test(value);
 
-		default: 
-            return value.trim().length >= 1 && value.trim().length <= 256
+		case 'any':
+            return value.trim().length > 2 || value === 'hz';
+
+		  default: 
+        return false
     }
 }
 
