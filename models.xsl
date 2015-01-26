@@ -40,6 +40,60 @@
 		  <xsl:value-of select="concat($cr, 'var ', @name, 'Collection = Backbone.Collection.extend({')"/>
 		  <xsl:value-of select="concat($cr2sp, 'model: ', @name)"/>
 		  <xsl:value-of select="concat($cr, '})', $cr)"/>
+		  <xsl:if test="@view = 'true'">
+			  <xsl:value-of select="concat($cr, 'var ', @name, 'View = Backbone.View.extend({')"/>
+			  <xsl:value-of select="concat($cr2sp, 'constructor: function(el, success, failure, evts){')"/>
+			  <xsl:value-of select="concat($cr4sp, 'var model = new ', @name)"/>
+			  <xsl:value-of select="concat($cr4sp, 'this.model = model')"/>
+			  <xsl:value-of select="concat($cr4sp, 'this.showSuccess = success')"/>
+			  <xsl:value-of select="concat($cr4sp, 'this.showFailure = failure')"/>
+			  <xsl:value-of select="concat($cr4sp, 'this.el = el')"/>
+			  <xsl:value-of select="concat($cr4sp, 'this.$el = $(el)')"/>
+			  <xsl:value-of select="concat($cr4sp, 'if(evts){_.extend(this.events, evts)}')"/>
+			  <xsl:value-of select="concat($cr4sp, 'this.delegateEvents()')"/>
+			  <xsl:value-of select="concat($cr4sp, 'view = this')"/>
+			  <xsl:value-of select="concat($cr4sp, 'this.listenTo(this.model, &quot;invalid&quot;, function(){this.showFailure(this.model.validationError)})')"/>
+		  	  <xsl:if test="@fetch = 'true'">
+			    <xsl:value-of select="concat($cr4sp, 'this.listenTo(this.model, &quot;change&quot;, this.render)')"/>
+			    <xsl:value-of select="concat($cr4sp, 'this.model.fetch()')"/>
+	  		  </xsl:if>
+			  <xsl:value-of select="concat($cr2sp, '},')"/>
+			  <xsl:value-of select="concat($cr2sp, 'testInput: function(ev){')"/>
+			  <xsl:value-of select="concat($cr4sp, 'var input = $(ev.target)')"/>
+			  <xsl:value-of select="concat($cr4sp, 'var val = $(input).val().trim()')"/>
+			  <xsl:value-of select="concat($cr4sp, 'var key = $(input).attr(&quot;class&quot;)')"/>
+			  <xsl:value-of select="concat($cr4sp, 'key = key.match(/[a-zA-Z]+$/)[0]')"/>
+			  <xsl:value-of select="concat($cr4sp, 'if(!val) this.model.unset(key)')"/>
+			  <xsl:value-of select="concat($cr4sp, 'else this.model.set(key, val)')"/>
+			  <xsl:value-of select="concat($cr2sp, '},')"/>
+		  	  <xsl:if test="@render = 'true'">
+				  <xsl:value-of select="concat($cr2sp, 'render: function(model){')"/>
+				  <xsl:value-of select="concat($cr4sp, 'var view = this')"/>
+				  <xsl:value-of select="concat($cr4sp, '$.each(model.attributes, function(i, val){')"/>
+				  <xsl:value-of select="concat($cr6sp, '$(view.el).find(this.prefix + i).val(val)')"/>
+				  <xsl:value-of select="concat($cr4sp, '})')"/>
+				  <xsl:value-of select="concat($cr2sp, '},')"/>
+	  		  </xsl:if>
+			  <xsl:value-of select="concat($cr2sp, 'events: {')"/>
+			  <xsl:for-each select='params/param[@text=&quot;true&quot;]'>
+			  	<xsl:value-of select="concat($cr4sp, '&quot;keyup ', ../../@selector, @name, '&quot;: &quot;testInput&quot;,')"/>
+		      </xsl:for-each>
+			  <xsl:value-of select="concat($cr4sp,  '&quot;click ', @selector, 'save&quot;: function(){')"/>
+			  <xsl:value-of select="concat($cr6sp,  'var view = this	')"/>
+			  <xsl:value-of select="concat($cr6sp,  'this.model.save(null, {')"/>
+			  <xsl:value-of select="concat($cr8sp,  'type: &quot;POST&quot;, ')"/>
+			  <xsl:value-of select="concat($cr8sp,  'success: function(model, res){')"/>
+			  <xsl:value-of select="concat($cr10sp, 'if(res) view.showSuccess()')"/>
+			  <xsl:value-of select="concat($cr10sp, 'else view.showFailure(&quot;Error@', @name, '.save&quot;)')"/>
+			  <xsl:value-of select="concat($cr8sp,  '},')"/>
+			  <xsl:value-of select="concat($cr8sp,  'error: function(model, res){')"/>
+			  <xsl:value-of select="concat($cr10sp, 'view.showFailure(&quot;Error@', @name, '.http&quot;)')"/>
+			  <xsl:value-of select="concat($cr8sp,  '}')"/>
+			  <xsl:value-of select="concat($cr6sp,  '})')"/>
+			  <xsl:value-of select="concat($cr4sp,  '}')"/>
+			  <xsl:value-of select="concat($cr2sp,  '},')"/>
+			  <xsl:value-of select="concat($cr, '})', $cr)"/>
+		  </xsl:if>
 		</xsl:for-each>  
     </xsl:template>
 </xsl:stylesheet>
