@@ -1,2 +1,3 @@
-// Model for client.
+
+	return getStuff
 

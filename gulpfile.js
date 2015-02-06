@@ -10,6 +10,12 @@ var xslString = require('./xsl-string')
 var document = null
 var stylesheet = null
 
+gulp.task('redis', function(){
+	var redis = require('redis').createClient()
+	redis.hmset('sch:user:test', {name: 'Коля'})
+	redis.set('sch:restore:pochta@yababay.ru', 'test')
+})
+
 gulp.task('model:templates', function(){
     if(!document) document = xslt.readXmlFile('models.xml');
     if(!stylesheet) stylesheet = xslt.readXsltString(xslString)
@@ -26,14 +32,14 @@ gulp.task('model:server', function(){
 		, 'src/model-handmade-server.js'
 		, 'src/model-end.js'
 	])
-	.pipe(concat('32_model.js'))
+	.pipe(concat('31_model.js'))
 	.pipe(replace('//_MODEL_BEGIN', [''
-		, 'var _ = require("underscore"), Backbone = require("backbone");'
-	].join('\n')))
-	.pipe(replace('//_MODEL_END', [''
-		, ' return new MainCollection'
-		, '})'
-	].join('\n')))
+		, 'var _ = require("underscore"), Backbone = require("backbone"),' 
+		, '  redis = require("redis").createClient(), Controller = require("locomotive").Controller,'
+		, '  shortId = require("shortid"),'
+		, '  config  = require("../")'
+	].join('\n').trim()))
+	.pipe(replace('//_MODEL_END', ''))
 	.pipe(gulp.dest('../server/config/initializers'))
 })
 
@@ -46,14 +52,14 @@ gulp.task('model:client', function(){
 		, 'src/model-handmade-client.js'
 		, 'src/model-end.js'
 	])
-	.pipe(concat('95_behavior.js'))
+	.pipe(concat('50_model.js'))
 	.pipe(replace('//_MODEL_BEGIN', ['',
 		'define(["underscore", "backbone"], function(_, Backbone){'
-	].join('\n')))
+	].join('\n').trim()))
 	.pipe(replace('//_MODEL_END', [''
-		, ' return new MainCollection'
 		, '})'
-	].join('\n')))
+	].join('\n').trim()))
+	//.pipe(uglify())
 	.pipe(gulp.dest('../server/public/js'))
 })
 
