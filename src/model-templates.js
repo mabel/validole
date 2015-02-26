@@ -1,54 +1,65 @@
 
 var Registration = Backbone.Model.extend({
+			  	`
   url: "/Registration".toLowerCase(),
   validate: function(attrs, opts){
     var notEmpty = null;
+    var isConst  = false;
     var allParams = [];
+    isConst = false
     notEmpty = true;
-    if(!validator(attrs["login"], "login", notEmpty)){
+    if(!isConst && !validator(attrs["login"], "login", notEmpty)){
       return "Error@Registration.login";
     };
     allParams.push("login")
+    isConst = false
     notEmpty = true;
-    if(!validator(attrs["course"], "webdesign|js-client|js-server|linux-admin", notEmpty)){
+    if(!isConst && !validator(attrs["course"], "webdesign|js-client|js-server|linux-admin", notEmpty)){
       return "Error@Registration.course";
     };
     allParams.push("course")
+    isConst = false
     notEmpty = true;
-    if(!validator(attrs["name"], "any", notEmpty)){
+    if(!isConst && !validator(attrs["name"], "any", notEmpty)){
       return "Error@Registration.name";
     };
     allParams.push("name")
+    isConst = false
     notEmpty = true;
-    if(!validator(attrs["email"], "email", notEmpty)){
+    if(!isConst && !validator(attrs["email"], "email", notEmpty)){
       return "Error@Registration.email";
     };
     allParams.push("email")
+    isConst = false
     notEmpty = false;
-    if(!validator(attrs["skype"], "skype", notEmpty)){
+    if(!isConst && !validator(attrs["skype"], "skype", notEmpty)){
       return "Error@Registration.skype";
     };
     allParams.push("skype")
+    isConst = false
     notEmpty = false;
-    if(!validator(attrs["phone"], "phone", notEmpty)){
+    if(!isConst && !validator(attrs["phone"], "phone", notEmpty)){
       return "Error@Registration.phone";
     };
     allParams.push("phone")
+    isConst = false
     notEmpty = true;
-    if(!validator(attrs["password"], "password", notEmpty)){
+    if(!isConst && !validator(attrs["password"], "password", notEmpty)){
       return "Error@Registration.password";
     };
     allParams.push("password")
+    isConst = false
     notEmpty = true;
-    if(!validator(attrs["passwordAgain"], "password", notEmpty)){
+    if(!isConst && !validator(attrs["passwordAgain"], "password", notEmpty)){
       return "Error@Registration.passwordAgain";
     };
     allParams.push("passwordAgain")
     if(attrs["password"] != attrs["passwordAgain"]){
       return "Error@Registration.passwordAgain";
     };
+    isConst = false
     notEmpty = true;
-    if(!validator(attrs["agree"], "yes", notEmpty)){
+    if(!isConst && !validator(attrs["agree"], "yes", notEmpty)){
       return "Error@Registration.agree";
     };
     allParams.push("agree")
@@ -63,8 +74,8 @@ var RegistrationCollection = Backbone.Collection.extend({
 })
 
 var RegistrationView = Backbone.View.extend({
-  constructor: function(el, success, failure, evts){
-    var model = new Registration
+  constructor: function(el, success, failure, evts, mdl){
+    var model = mdl ? mdl : new Registration
     this.model = model
     this.showSuccess = success
     this.showFailure = failure
@@ -81,7 +92,7 @@ var RegistrationView = Backbone.View.extend({
   },
   testInput: function(ev){
     var input = $(ev.target)
-    var val = $(input).val().trim()
+    var val = $(input).is("[type=checkbox]") ? $(input).prop("checked") : $(input).val().trim()
     var key = $(input).attr("class")
     key = key.match(/[a-zA-Z]+$/)[0]
     if(!val) this.model.unset(key)
@@ -112,45 +123,54 @@ var RegistrationView = Backbone.View.extend({
 })
 
 var Personal = Backbone.Model.extend({
+			  	`
   url: "/Personal".toLowerCase(),
   validate: function(attrs, opts){
     var notEmpty = null;
+    var isConst  = false;
     var allParams = [];
+    isConst = false
     notEmpty = true;
-    if(!validator(attrs["name"], "any", notEmpty)){
+    if(!isConst && !validator(attrs["name"], "any", notEmpty)){
       return "Error@Personal.name";
     };
     allParams.push("name")
+    isConst = false
     notEmpty = true;
-    if(!validator(attrs["email"], "email", notEmpty)){
+    if(!isConst && !validator(attrs["email"], "email", notEmpty)){
       return "Error@Personal.email";
     };
     allParams.push("email")
+    isConst = false
     notEmpty = false;
-    if(!validator(attrs["skype"], "skype", notEmpty)){
+    if(!isConst && !validator(attrs["skype"], "skype", notEmpty)){
       return "Error@Personal.skype";
     };
     allParams.push("skype")
+    isConst = false
     notEmpty = false;
-    if(!validator(attrs["phone"], "phone", notEmpty)){
+    if(!isConst && !validator(attrs["phone"], "phone", notEmpty)){
       return "Error@Personal.phone";
     };
     allParams.push("phone")
+    isConst = false
     notEmpty = false;
-    if(!validator(attrs["password"], "password", notEmpty)){
+    if(!isConst && !validator(attrs["password"], "password", notEmpty)){
       return "Error@Personal.password";
     };
     allParams.push("password")
+    isConst = false
     notEmpty = false;
-    if(!validator(attrs["passwordAgain"], "password", notEmpty)){
+    if(!isConst && !validator(attrs["passwordAgain"], "password", notEmpty)){
       return "Error@Personal.passwordAgain";
     };
     allParams.push("passwordAgain")
     if(attrs["password"] != attrs["passwordAgain"]){
       return "Error@Personal.passwordAgain";
     };
+    isConst = false
     notEmpty = false;
-    if(!validator(attrs["passwordOld"], "password", notEmpty)){
+    if(!isConst && !validator(attrs["passwordOld"], "password", notEmpty)){
       return "Error@Personal.passwordOld";
     };
     allParams.push("passwordOld")
@@ -165,8 +185,8 @@ var PersonalCollection = Backbone.Collection.extend({
 })
 
 var PersonalView = Backbone.View.extend({
-  constructor: function(el, success, failure, evts){
-    var model = new Personal
+  constructor: function(el, success, failure, evts, mdl){
+    var model = mdl ? mdl : new Personal
     this.model = model
     this.showSuccess = success
     this.showFailure = failure
@@ -185,7 +205,7 @@ var PersonalView = Backbone.View.extend({
   },
   testInput: function(ev){
     var input = $(ev.target)
-    var val = $(input).val().trim()
+    var val = $(input).is("[type=checkbox]") ? $(input).prop("checked") : $(input).val().trim()
     var key = $(input).attr("class")
     key = key.match(/[a-zA-Z]+$/)[0]
     if(!val) this.model.unset(key)
@@ -194,7 +214,10 @@ var PersonalView = Backbone.View.extend({
   render: function(model){
     var view = this
     $.each(model.attributes, function(i, val){
-      $(view.el).find(".sch-personal-" + i).val(val)
+      var jqEl = $(view.el).find(".sch-personal-" + i)
+      if(!jqEl.length) return
+      if($(jqEl[0]).is("input")) $(jqEl).val(val)
+      if($(jqEl[0]).is("label, span, div, td")) $(jqEl).text(val)
     })
   },
   events: {
@@ -222,12 +245,15 @@ var PersonalView = Backbone.View.extend({
 })
 
 var Remind = Backbone.Model.extend({
+			  	`
   url: "/Remind".toLowerCase(),
   validate: function(attrs, opts){
     var notEmpty = null;
+    var isConst  = false;
     var allParams = [];
+    isConst = false
     notEmpty = true;
-    if(!validator(attrs["email"], "email", notEmpty)){
+    if(!isConst && !validator(attrs["email"], "email", notEmpty)){
       return "Error@Remind.email";
     };
     allParams.push("email")
@@ -242,8 +268,8 @@ var RemindCollection = Backbone.Collection.extend({
 })
 
 var RemindView = Backbone.View.extend({
-  constructor: function(el, success, failure, evts){
-    var model = new Remind
+  constructor: function(el, success, failure, evts, mdl){
+    var model = mdl ? mdl : new Remind
     this.model = model
     this.showSuccess = success
     this.showFailure = failure
@@ -260,7 +286,7 @@ var RemindView = Backbone.View.extend({
   },
   testInput: function(ev){
     var input = $(ev.target)
-    var val = $(input).val().trim()
+    var val = $(input).is("[type=checkbox]") ? $(input).prop("checked") : $(input).val().trim()
     var key = $(input).attr("class")
     key = key.match(/[a-zA-Z]+$/)[0]
     if(!val) this.model.unset(key)
@@ -285,25 +311,30 @@ var RemindView = Backbone.View.extend({
 })
 
 var NewPassword = Backbone.Model.extend({
+			  	`
   url: "/NewPassword".toLowerCase(),
   validate: function(attrs, opts){
     var notEmpty = null;
+    var isConst  = false;
     var allParams = [];
+    isConst = false
     notEmpty = true;
-    if(!validator(attrs["password"], "password", notEmpty)){
+    if(!isConst && !validator(attrs["password"], "password", notEmpty)){
       return "Error@NewPassword.password";
     };
     allParams.push("password")
+    isConst = false
     notEmpty = true;
-    if(!validator(attrs["passwordAgain"], "password", notEmpty)){
+    if(!isConst && !validator(attrs["passwordAgain"], "password", notEmpty)){
       return "Error@NewPassword.passwordAgain";
     };
     allParams.push("passwordAgain")
     if(attrs["password"] != attrs["passwordAgain"]){
       return "Error@NewPassword.passwordAgain";
     };
+    isConst = false
     notEmpty = true;
-    if(!validator(attrs["uuid"], "uuid", notEmpty)){
+    if(!isConst && !validator(attrs["uuid"], "uuid", notEmpty)){
       return "Error@NewPassword.uuid";
     };
     allParams.push("uuid")
@@ -318,8 +349,8 @@ var NewPasswordCollection = Backbone.Collection.extend({
 })
 
 var NewPasswordView = Backbone.View.extend({
-  constructor: function(el, success, failure, evts){
-    var model = new NewPassword
+  constructor: function(el, success, failure, evts, mdl){
+    var model = mdl ? mdl : new NewPassword
     this.model = model
     this.showSuccess = success
     this.showFailure = failure
@@ -336,7 +367,7 @@ var NewPasswordView = Backbone.View.extend({
   },
   testInput: function(ev){
     var input = $(ev.target)
-    var val = $(input).val().trim()
+    var val = $(input).is("[type=checkbox]") ? $(input).prop("checked") : $(input).val().trim()
     var key = $(input).attr("class")
     key = key.match(/[a-zA-Z]+$/)[0]
     if(!val) this.model.unset(key)
@@ -362,17 +393,21 @@ var NewPasswordView = Backbone.View.extend({
 })
 
 var Login = Backbone.Model.extend({
+			  	`
   url: "/Login".toLowerCase(),
   validate: function(attrs, opts){
     var notEmpty = null;
+    var isConst  = false;
     var allParams = [];
+    isConst = false
     notEmpty = true;
-    if(!validator(attrs["login"], "login", notEmpty)){
+    if(!isConst && !validator(attrs["login"], "login", notEmpty)){
       return "Error@Login.login";
     };
     allParams.push("login")
+    isConst = false
     notEmpty = true;
-    if(!validator(attrs["password"], "password", notEmpty)){
+    if(!isConst && !validator(attrs["password"], "password", notEmpty)){
       return "Error@Login.password";
     };
     allParams.push("password")
@@ -387,8 +422,8 @@ var LoginCollection = Backbone.Collection.extend({
 })
 
 var LoginView = Backbone.View.extend({
-  constructor: function(el, success, failure, evts){
-    var model = new Login
+  constructor: function(el, success, failure, evts, mdl){
+    var model = mdl ? mdl : new Login
     this.model = model
     this.showSuccess = success
     this.showFailure = failure
@@ -405,7 +440,7 @@ var LoginView = Backbone.View.extend({
   },
   testInput: function(ev){
     var input = $(ev.target)
-    var val = $(input).val().trim()
+    var val = $(input).is("[type=checkbox]") ? $(input).prop("checked") : $(input).val().trim()
     var key = $(input).attr("class")
     key = key.match(/[a-zA-Z]+$/)[0]
     if(!val) this.model.unset(key)
@@ -428,6 +463,119 @@ var LoginView = Backbone.View.extend({
       })
     }
   },
+})
+
+var Chunk = Backbone.Model.extend({
+			  	`
+  url: "/Chunk".toLowerCase(),
+  validate: function(attrs, opts){
+    var notEmpty = null;
+    var isConst  = false;
+    var allParams = [];
+    isConst = false
+    notEmpty = true;
+    if(!isConst && !validator(attrs["invite"], "login", notEmpty)){
+      return "Error@Chunk.invite";
+    };
+    allParams.push("invite")
+    isConst = false
+    notEmpty = true;
+    if(!isConst && !validator(attrs["code"], "any", notEmpty)){
+      return "Error@Chunk.code";
+    };
+    allParams.push("code")
+    isConst = false
+    notEmpty = true;
+    if(!isConst && !validator(attrs["description"], "any", notEmpty)){
+      return "Error@Chunk.description";
+    };
+    allParams.push("description")
+    isConst = true; this.set("subkey", "chunk");
+    notEmpty = true;
+    if(!isConst && !validator(attrs["subkey"], "login", notEmpty)){
+      return "Error@Chunk.subkey";
+    };
+    allParams.push("subkey")
+    isConst = true; this.set("expire", "36000");
+    notEmpty = true;
+    if(!isConst && !validator(attrs["expire"], "int", notEmpty)){
+      return "Error@Chunk.expire";
+    };
+    allParams.push("expire")
+    _.each(this.attributes, function(el, i){
+      if(allParams.indexOf(i) < 0) return "Error@Chunk.oddParam";
+    })
+  }
+})
+
+var ChunkCollection = Backbone.Collection.extend({
+  model: Chunk
+})
+
+var Audience = Backbone.Model.extend({
+  url: "/teacher/Audience".toLowerCase(),
+  validate: function(attrs, opts){
+    var notEmpty = null;
+    var isConst  = false;
+    var allParams = [];
+    isConst = false
+    notEmpty = true;
+    if(!isConst && !validator(attrs["name"], "any", notEmpty)){
+      return "Error@Audience.name";
+    };
+    allParams.push("name")
+    isConst = false
+    notEmpty = true;
+    if(!isConst && !validator(attrs["email"], "email", notEmpty)){
+      return "Error@Audience.email";
+    };
+    allParams.push("email")
+    isConst = false
+    notEmpty = false;
+    if(!isConst && !validator(attrs["skype"], "skype", notEmpty)){
+      return "Error@Audience.skype";
+    };
+    allParams.push("skype")
+    isConst = false
+    notEmpty = false;
+    if(!isConst && !validator(attrs["phone"], "phone", notEmpty)){
+      return "Error@Audience.phone";
+    };
+    allParams.push("phone")
+    isConst = false
+    notEmpty = false;
+    if(!isConst && !validator(attrs["chatBan"], "boolean", notEmpty)){
+      return "Error@Audience.chatBan";
+    };
+    allParams.push("chatBan")
+    isConst = false
+    notEmpty = false;
+    if(!isConst && !validator(attrs["audioBan"], "boolean", notEmpty)){
+      return "Error@Audience.audioBan";
+    };
+    allParams.push("audioBan")
+    _.each(this.attributes, function(el, i){
+      if(allParams.indexOf(i) < 0) return "Error@Audience.oddParam";
+    })
+  }
+})
+
+var AudienceCollection = Backbone.Collection.extend({
+  constructor: function(el, success, failure, evts, arr){
+    this.on("add", function(model){
+      if(!$(el).is("tbody")) return
+      var tr = $(el).find("tr.hidden")[0]
+      if(!tr) return
+      var tr = $(tr).clone().appendTo(el)
+      new AudienceView (tr, success, failure, evts)
+    })
+    if(!arr) return
+    if(typeof arr === "string") arr = arr.split(",")
+    _.each(arr, function(el, i){)
+      this.add({id: el})
+    })
+  },
+  model: Audience
 })
 
 
@@ -463,5 +611,19 @@ var getStuff = function(model){
       return LoginView
     case "collection.Login":
       return LoginCollection
+    case "model.Chunk":
+      return Chunk
+    case "view.Chunk":
+      return ChunkView
+    case "collection.Chunk":
+      return ChunkCollection
+    case "model.Audience":
+      return Audience
+    case "view.Audience":
+      return AudienceView
+    case "collection.Audience":
+      return AudienceCollection
+    default:
+      return null
   }
 }

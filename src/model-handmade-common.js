@@ -6,14 +6,20 @@ if(typeof global === 'undefined'){
 	}
 }
 
-var redis = null
-
 if(typeof window === 'undefined'){
-	if(!redis) redis = require('redis').createClient()
+	var __ = require('underscore')
+	var redis = require('redis').createClient()
 	Backbone.sync = function(method, model, options){
-		if(model.login){model.id = model.login; delete model.login} 
-		var key = config.prefix + ':' + model.id
-		delete model.attributes.id
-		redis.hmset(key, model.attributes)
+		var attrs = __.clone(model.attributes)
+		var key = attrs.key
+		var expire = attrs.expire
+		delete attrs.id
+		delete attrs.key
+		delete attrs.expire
+		redis.hmset(key, attrs, function(err){
+			if(err || !expire) return
+			expire = parseInt(attrs.expire)
+			redis.expire(expire)
+		})
 	}
 }

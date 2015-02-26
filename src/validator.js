@@ -1,7 +1,7 @@
 function validator(value, filter, mayNotBeEmpty){
   if(mayNotBeEmpty && !value) return false
   if(!mayNotBeEmpty && !value) return true
-  if(value.length > 256) return false
+  if(value.length > 4096) return false
   if(/^\/.+\/$/.test(filter)){
 	  var reg = eval(filter)
 	  return reg.test(value)
