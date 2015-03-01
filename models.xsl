@@ -59,16 +59,16 @@
 		  <xsl:value-of select="concat($cr2sp, '}')"/>
 		  <xsl:value-of select="concat($cr, '})', $cr)"/>
 		  <xsl:if test="@table = 'true'">
-			  <xsl:value-of select="concat($cr, 'var ', @name, ' Table = function(tr, arr, success, failure, evts){')"/>
+			  <xsl:value-of select="concat($cr, 'var ', @name, 'Table = function(tr, arr, success, failure, evts){')"/>
 			  <xsl:value-of select="concat($cr2sp, 'if(!arr) return')"/>
 			  <xsl:value-of select="concat($cr2sp, 'this.tr = tr')"/>
 			  <xsl:value-of select="concat($cr2sp, 'var table = this')"/>
-			  <xsl:value-of select="concat($cr2sp, 'var collection = new ', @name, ' Collection')"/>
+			  <xsl:value-of select="concat($cr2sp, 'var collection = new ', @name, 'Collection')"/>
 			  <xsl:value-of select="concat($cr2sp, 'var onAdd = function(model){')"/>
 			  <xsl:value-of select="concat($cr2sp, 'if(!$(table.tr).is(&quot;tr&quot;)) return')"/>
 			  <xsl:value-of select="concat($cr2sp, 'var tbody = $(table.tr).parent()')"/>
 			  <xsl:value-of select="concat($cr2sp, 'var tr = $(table.tr).clone().removeClass(&quot;hidden&quot;).appendTo(tbody)')"/>
-			  <xsl:value-of select="concat($cr2sp, 'new @name View (tr, success, failure, evts, model)')"/>
+			  <xsl:value-of select="concat($cr2sp, 'new ', @name, 'View (tr, success, failure, evts, model)')"/>
 			  <xsl:value-of select="concat($cr2sp, '}')"/>
 			  <xsl:value-of select="concat($cr2sp, 'collection.on(&quot;add&quot;, onAdd)')"/>
 			  <xsl:value-of select="concat($cr2sp, 'if(typeof arr === &quot;string&quot;) arr = arr.split(&quot;,&quot;)')"/>
@@ -116,8 +116,9 @@
 				  <xsl:value-of select="concat($cr4sp, '$.each(model.attributes, function(i, val){')"/>
 				  <xsl:value-of select="concat($cr6sp, 'var jqEl = $(view.el).find(&quot;', @selector, '&quot; + i)')"/>
 				  <xsl:value-of select="concat($cr6sp, 'if(!jqEl.length) return')"/>
-				  <xsl:value-of select="concat($cr6sp, 'if($(jqEl[0]).is(&quot;input&quot;)) $(jqEl).val(val)')"/>
-				  <xsl:value-of select="concat($cr6sp, 'if($(jqEl[0]).is(&quot;label, span, div, td&quot;)) $(jqEl).text(val)')"/>
+				  <xsl:value-of select="concat($cr6sp, 'if($(jqEl[0]).is(&quot;[type=checkbox]&quot;)) $(jqEl).prop(&quot;checked&quot;, val)')"/>
+				  <xsl:value-of select="concat($cr6sp, 'else if($(jqEl[0]).is(&quot;input, select&quot;)) $(jqEl).val(val)')"/>
+				  <xsl:value-of select="concat($cr6sp, 'else if($(jqEl[0]).is(&quot;label, span, div, td&quot;)) $(jqEl).text(val)')"/>
 				  <xsl:value-of select="concat($cr4sp, '})')"/>
 				  <xsl:value-of select="concat($cr2sp, '},')"/>
 	  		  </xsl:if>
