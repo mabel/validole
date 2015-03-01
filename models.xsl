@@ -18,10 +18,10 @@
 		  <xsl:value-of select="concat($cr, 'var ', @name, ' = Backbone.Model.extend({')"/>
 		  <xsl:choose>
 			  <xsl:when test='@urlPrefix'>
-				  <xsl:value-of select="concat($cr2sp, 'url: &quot;', @urlPrefix, '/', @name, '&quot;.toLowerCase(),')"/>
+				<xsl:value-of select="concat($cr2sp, 'url: &quot;', @urlPrefix, '/', @name, '&quot;.toLowerCase(),')"/>
 			  </xsl:when>
 			  <xsl:otherwise>
-			  	`<xsl:value-of select="concat($cr2sp, 'url: &quot;/', @name, '&quot;.toLowerCase(),')"/>
+			  	<xsl:value-of select="concat($cr2sp, 'url: &quot;/', @name, '&quot;.toLowerCase(),')"/>
 			  </xsl:otherwise>
 		  </xsl:choose>
 		  <xsl:value-of select="concat($cr2sp, 'validate: function(attrs, opts){')"/>
@@ -58,26 +58,29 @@
 		  <xsl:value-of select="concat($cr4sp, '})')"/>
 		  <xsl:value-of select="concat($cr2sp, '}')"/>
 		  <xsl:value-of select="concat($cr, '})', $cr)"/>
+		  <xsl:if test="@table = 'true'">
+			  <xsl:value-of select="concat($cr, 'var ', @name, ' Table = function(tr, arr, success, failure, evts){')"/>
+			  <xsl:value-of select="concat($cr2sp, 'if(!arr) return')"/>
+			  <xsl:value-of select="concat($cr2sp, 'this.tr = tr')"/>
+			  <xsl:value-of select="concat($cr2sp, 'var table = this')"/>
+			  <xsl:value-of select="concat($cr2sp, 'var collection = new ', @name, ' Collection')"/>
+			  <xsl:value-of select="concat($cr2sp, 'var onAdd = function(model){')"/>
+			  <xsl:value-of select="concat($cr2sp, 'if(!$(table.tr).is(&quot;tr&quot;)) return')"/>
+			  <xsl:value-of select="concat($cr2sp, 'var tbody = $(table.tr).parent()')"/>
+			  <xsl:value-of select="concat($cr2sp, 'var tr = $(table.tr).clone().removeClass(&quot;hidden&quot;).appendTo(tbody)')"/>
+			  <xsl:value-of select="concat($cr2sp, 'new @name View (tr, success, failure, evts, model)')"/>
+			  <xsl:value-of select="concat($cr2sp, '}')"/>
+			  <xsl:value-of select="concat($cr2sp, 'collection.on(&quot;add&quot;, onAdd)')"/>
+			  <xsl:value-of select="concat($cr2sp, 'if(typeof arr === &quot;string&quot;) arr = arr.split(&quot;,&quot;)')"/>
+			  <xsl:value-of select="concat($cr2sp, '_.each(arr, function(el, i){')"/>
+			  <xsl:value-of select="concat($cr4sp, 'collection.add({id: el})')"/>
+			  <xsl:value-of select="concat($cr2sp, '})')"/>
+			  <xsl:value-of select="concat($cr, '}', $cr)"/>
+		  </xsl:if>
 		  <xsl:value-of select="concat($cr, 'var ', @name, 'Collection = Backbone.Collection.extend({')"/>
-		  	  <xsl:if test="@table = 'true'">
-				  <xsl:value-of select="concat($cr2sp, 'constructor: function(el, success, failure, evts, arr){')"/>
-				  <xsl:value-of select="concat($cr4sp, 'this.on(&quot;add&quot;, function(model){')"/>
-				  <xsl:value-of select="concat($cr6sp, 'if(!$(el).is(&quot;tbody&quot;)) return')"/>
-				  <xsl:value-of select="concat($cr6sp, 'var tr = $(el).find(&quot;tr.hidden&quot;)[0]')"/>
-				  <xsl:value-of select="concat($cr6sp, 'if(!tr) return')"/>
-				  <xsl:value-of select="concat($cr6sp, 'var tr = $(tr).clone().appendTo(el)')"/>
-				  <xsl:value-of select="concat($cr6sp, 'new ', @name, 'View (tr, success, failure, evts)')"/>
-				  <xsl:value-of select="concat($cr4sp, '})')"/>
-				  <xsl:value-of select="concat($cr4sp, 'if(!arr) return')"/>
-				  <xsl:value-of select="concat($cr4sp, 'if(typeof arr === &quot;string&quot;) arr = arr.split(&quot;,&quot;)')"/>
-				  <xsl:value-of select="concat($cr4sp, '_.each(arr, function(el, i){)')"/>
-				  <xsl:value-of select="concat($cr6sp, 'this.add({id: el})')"/>
-				  <xsl:value-of select="concat($cr4sp, '})')"/>
-				  <xsl:value-of select="concat($cr2sp, '},')"/>
-	  		  </xsl:if>
 			  <xsl:value-of select="concat($cr2sp, 'model: ', @name)"/>
 		  <xsl:value-of select="concat($cr, '})', $cr)"/>
-		  <xsl:if test="@view = 'true'">
+		  <xsl:if test="@view = 'true' or @table = 'true'">
 			  <xsl:value-of select="concat($cr, 'var ', @name, 'View = Backbone.View.extend({')"/>
 			  <xsl:value-of select="concat($cr2sp, 'constructor: function(el, success, failure, evts, mdl){')"/>
 			  <xsl:value-of select="concat($cr4sp, 'var model = mdl ? mdl : new ', @name)"/>
@@ -133,11 +136,11 @@
 			  <xsl:value-of select="concat($cr6sp,  'this.model.save(null, {')"/>
 			  <xsl:value-of select="concat($cr8sp,  'type: &quot;POST&quot;, ')"/>
 			  <xsl:value-of select="concat($cr8sp,  'success: function(model, err){')"/>
-			  <xsl:value-of select="concat($cr10sp, 'if(!err) view.showSuccess()')"/>
-			  <xsl:value-of select="concat($cr10sp, 'else view.showFailure(&quot;Error@', @name, '.save&quot;)')"/>
+			  <xsl:value-of select="concat($cr10sp, 'if(!err &amp;&amp; view.showSuccess) view.showSuccess()')"/>
+			  <xsl:value-of select="concat($cr10sp, 'else if(view.showFailure) view.showFailure(&quot;Error@', @name, '.save&quot;)')"/>
 			  <xsl:value-of select="concat($cr8sp,  '},')"/>
 			  <xsl:value-of select="concat($cr8sp,  'error: function(model, err){')"/>
-			  <xsl:value-of select="concat($cr10sp, 'view.showFailure(&quot;Error@', @name, '.http&quot;)')"/>
+			  <xsl:value-of select="concat($cr10sp, 'if(view.showFailure) view.showFailure(&quot;Error@', @name, '.http&quot;)')"/>
 			  <xsl:value-of select="concat($cr8sp,  '}')"/>
 			  <xsl:value-of select="concat($cr6sp,  '})')"/>
 			  <xsl:value-of select="concat($cr4sp,  '}')"/>
@@ -154,6 +157,8 @@
 				<xsl:value-of select="concat($cr6sp,  'return ', @name, 'View')"/>
 				<xsl:value-of select="concat($cr4sp,  'case &quot;collection.', @name, '&quot;:')"/>
 				<xsl:value-of select="concat($cr6sp,  'return ', @name, 'Collection')"/>
+				<xsl:value-of select="concat($cr4sp,  'case &quot;table.', @name, '&quot;:')"/>
+				<xsl:value-of select="concat($cr6sp,  'return ', @name, 'Table')"/>
 			</xsl:for-each>  
 			<xsl:value-of select="concat($cr4sp,  'default:')"/>
 			<xsl:value-of select="concat($cr6sp,  'return null')"/>
